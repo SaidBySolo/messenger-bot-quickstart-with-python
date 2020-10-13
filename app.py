@@ -42,7 +42,7 @@ def handle_message(sender_psid, received_message):
         }
     elif received_message["attachments"]:
         # Gets the URL of the message attachment
-        attachment_url = received_message["attachments"][0]["payload.url"]
+        attachment_url = received_message["attachments"][0]["payload"]["url"]
         response = {
             "attachment": {
                 "type": "template",
