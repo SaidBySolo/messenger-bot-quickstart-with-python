@@ -12,7 +12,7 @@ app = Sanic(__name__)
 PAGE_ACCESS_TOKEN = os.environ["PAGE_ACCESS_TOKEN"]
 
 # Handles messages events
-def call_send_api(sender_psid, response):
+async def call_send_api(sender_psid, response):
     # Construct the message body
     request_body = {"recipient": {"id": sender_psid}, "message": response}
     qs = {"access_token": PAGE_ACCESS_TOKEN}
