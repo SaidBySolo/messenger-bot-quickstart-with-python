@@ -140,7 +140,7 @@ async def _webhook(request):
             elif webhook_event.get("postback"):
                 await handle_postback(sender_psid, webhook_event["postback"])
 
-            return json({"status": 200})
+            return response.text("EVENT_RECEIVED")
 
     else:
         # Return a '404 Not Found' if event is not from a page subscription
