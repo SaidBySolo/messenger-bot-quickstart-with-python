@@ -86,7 +86,6 @@ async def handle_postback(sender_psid, received_postback):
     elif payload == "no":
         response = {"text": "Oops, try sending another image."}
 
-    call_send_api(sender_psid, response)
     await call_send_api(sender_psid, response)
 
 
