@@ -119,14 +119,11 @@ async def _webhook(request):
     # Parse the request body from the POST
     body = request.json
 
-    page = body.get("object")
-    entry = body.get("entry")
-
     # Check the webhook event is from a Page subscription
-    if page == "page":
+    if body.get("object") == "page":
 
         # Iterate over each entry - there may be multiple if batched
-        for messaging in entry:
+        for messaging in body.get("entry"):
 
             # Get the webhook event. entry.messaging is an array, but
             # will only ever contain one event, so we get index 0
