@@ -4,7 +4,6 @@ import aiohttp
 
 from sanic import Sanic
 from sanic import response
-from sanic.response import json
 from sanic.exceptions import abort
 
 app = Sanic(__name__)
