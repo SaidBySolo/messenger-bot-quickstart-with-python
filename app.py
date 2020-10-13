@@ -21,7 +21,7 @@ async def call_send_api(sender_psid, response):
     try:
         async with aiohttp.ClientSession() as cs:
             async with cs.post(
-                "https:#graph.facebook.com/v2.6/me/messages",
+                "https://graph.facebook.com/v2.6/me/messages",
                 json=request_body,
                 params=qs,
             ) as r:
@@ -31,14 +31,14 @@ async def call_send_api(sender_psid, response):
 
 
 # Handles messages events
-def handle_message(sender_psid, received_message):
+async def handle_message(sender_psid, received_message):
 
     # Check if the message contains text
     if received_message["text"]:
         # Create the payload for a basic text message
         # will be added to the body of our request to the Send API
         response = {
-            "text": f"You sent the message: '{received_message}'. Now send me an attachment!"
+            "text": f"""You sent the message: "{received_message["text"]}". Now send me an attachment!"""
         }
     elif received_message["attachments"]:
         # Gets the URL of the message attachment
@@ -71,11 +71,11 @@ def handle_message(sender_psid, received_message):
             }
         }
     # Sends the response message
-    call_send_api(sender_psid, response)
+    await call_send_api(sender_psid, response)
 
 
 # Handles messaging_postbacks events
-def handle_postback(sender_psid, received_postback):
+async def handle_postback(sender_psid, received_postback):
 
     # Get the payload for the postback
     payload = received_postback["payload"]
@@ -87,6 +87,7 @@ def handle_postback(sender_psid, received_postback):
         response = {"text": "Oops, try sending another image."}
 
     call_send_api(sender_psid, response)
+    await call_send_api(sender_psid, response)
 
 
 @app.get("/webhook")
@@ -136,9 +137,9 @@ async def _webhook(request):
             # Check if the event is a message or postback and
             # pass the event to the appropriate handler function
             if webhook_event["message"]:
-                handle_message(sender_psid, webhook_event["message"])
+                await handle_message(sender_psid, webhook_event["message"])
             elif webhook_event["postback"]:
-                handle_postback(sender_psid, webhook_event["postback"])
+                await handle_postback(sender_psid, webhook_event["postback"])
 
             return json({"status": 200})
 
