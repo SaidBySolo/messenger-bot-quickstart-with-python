@@ -34,13 +34,13 @@ async def call_send_api(sender_psid, response):
 async def handle_message(sender_psid, received_message):
 
     # Check if the message contains text
-    if received_message["text"]:
+    if received_message.get("text"):
         # Create the payload for a basic text message
         # will be added to the body of our request to the Send API
         response = {
             "text": f"""You sent the message: "{received_message["text"]}". Now send me an attachment!"""
         }
-    elif received_message["attachments"]:
+    elif received_message.get("attachments"):
         # Gets the URL of the message attachment
         attachment_url = received_message["attachments"][0]["payload"]["url"]
         response = {
@@ -135,9 +135,9 @@ async def _webhook(request):
 
             # Check if the event is a message or postback and
             # pass the event to the appropriate handler function
-            if webhook_event["message"]:
+            if webhook_event.get("message"):
                 await handle_message(sender_psid, webhook_event["message"])
-            elif webhook_event["postback"]:
+            elif webhook_event.get("postback"):
                 await handle_postback(sender_psid, webhook_event["postback"])
 
             return json({"status": 200})
